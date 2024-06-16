@@ -1,9 +1,23 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Link } from "react-router-dom";
-import list from "../../public/list.json";
+// import list from "../../public/list.json";
 import Cards from "./Cards";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 const Course = () => {
+  const [books, setBooks] = useState([]);
+  useEffect(()=>{
+    const getBooks = async()=>{
+      try{
+        const res = await axios.get('http://localhost:3000/book');
+        // console.log(res.data)
+        setBooks(res.data)
+      }catch(e){
+        console.log(e);
+      }
+    }
+    getBooks();
+  },[])
   return (
     <>
     <div className="max-w-screen px-3 md:px-6 md:py-4 dark:bg-slate-900 dark:text-white">
@@ -13,11 +27,10 @@ const Course = () => {
         <Link to="/">
         <button className="bg-pink-500 text-slate-100 rounded-md px-4 py-2 mt-3 hover:bg-pink-400 duration-300 transition-all ease-in-out">Back</button>
         </Link>
-        
     </div>
 
     <div className="grid mt-12 md:grid-cols-4 grid-cols-1 m-0">
-    {list.map((data)=>{
+    {books.map((data)=>{
         return (
             <Cards
             item={data}

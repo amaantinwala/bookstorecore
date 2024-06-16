@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
+import {useAuth} from "../context/AuthProvider.jsx"
 import Login from "./Login";
+import Logout from "./Logout.jsx";
 const Navbar = () => {
+
+  const [authUser, setauthUser] = useAuth();
+  console.log(authUser);
   const [sticky, setSticky] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -142,6 +147,8 @@ const Navbar = () => {
               </svg>
             </label>
             <div>
+              {authUser?
+              <Logout/>:
               <a
                 className="px-4 py-2 bg-black text-white rounded-md cursor-pointer hover:bg-slate-900 dark:hover:bg-slate-600"
                 onClick={() => {
@@ -150,6 +157,7 @@ const Navbar = () => {
               >
                 Login
               </a>
+}
               <Login />
             </div>
           </div>

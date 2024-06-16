@@ -1,8 +1,37 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {useForm} from "react-hook-form";
+import toast from 'react-hot-toast';
+import axios from "axios";
 const Signup = () => {
+  const location = useLocation();
+  const navigate=useNavigate();
+  const from = location.state?.from?.pathname || "/"
   const {register, handleSubmit, formState:{errors}} = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async(data) => {
+    const userInfo = {
+      fullname:data.fullname,
+      email:data.email,
+      password:data.password,
+    }
+
+    await axios.post("http://localhost:3000/user/create",userInfo)
+    .then((res)=>{
+    console.log(res);
+      if(res.data){
+        toast.success("Signup Successfull");
+        navigate(from, {replace:true});
+      }
+      localStorage.setItem("Users",JSON.stringify(res.data.userDetails));
+    }).catch((err)=>{
+      if(err.response){
+        console.log(err)
+       toast.error(err.response.data);
+      }
+
+      
+        
+    })
+  };
   return (
     <>
       <div className="w-full min-h-screen flex flex-grow justify-center items-center dark:bg-slate-900">
@@ -20,9 +49,9 @@ const Signup = () => {
                 >
                   <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
                 </svg>
-                <input type="text" className="grow" placeholder="Name" {...register("name",{required:true})}/>
+                <input type="text" className="grow" placeholder="Name" {...register("fullname",{required:true})}/>
               </label>
-              {errors.name && (
+              {errors.fullname && (
         <p role="alert" className=" px-2 text-sm text-red-500">Name is required</p>
       )}
               <label className="input input-bordered flex items-center gap-2 dark:bg-slate-900 dark:text-white dark:border dark:border-slate-700">
