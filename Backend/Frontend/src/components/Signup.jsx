@@ -14,7 +14,7 @@ const Signup = () => {
       password:data.password,
     }
 
-    await axios.post("http://localhost:3000/user/create",userInfo)
+    await axios.post("/user/create",userInfo)
     .then((res)=>{
     console.log(res);
       if(res.data){

@@ -10,7 +10,7 @@ const Login = () => {
       password:data.password,
     }
 
-    await axios.post("http://localhost:3000/user/login",userInfo)
+    await axios.post("/user/login",userInfo)
     .then((res) => {
       if(res.data){
         toast.success("Login Successfull");

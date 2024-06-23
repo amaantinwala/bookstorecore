@@ -3,6 +3,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const bookRoute = require('./routes/book.route.js');
 const userRoute = require('./routes/user.route.js');
+const path = require('path');
 const app = express();
 const cors = require('cors');
 
@@ -26,7 +27,15 @@ console.log(error);
 app.use("/book",bookRoute);
 app.use("/user",userRoute);
 
+//deployment
 
+if(process.env.NODE_ENV === 'production'){
+    const dirPath = path.resolve();
+    app.use(express.static("Frontend/dist"));
+    app.get("*",(req,res)=>{
+        res.sendFile(path.resolve(dirPath,"Frontend","dist","index.html")
+    )})
+}
 
 app.listen(port, ()=>{
     console.log(`Server started on ${port}`);
